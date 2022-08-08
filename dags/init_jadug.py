@@ -36,7 +36,7 @@ for table in ['orders', 'order_details', 'products']:
     )
 
     to_dwh = BashOperator(
-        task_id='to_dwh_orders',
+        task_id='to_dwh_' + table,
         bash_command="""bq mk --external_table_definition=/root/table_def/jadug/{{ params.table_name }}.def de_7.jadug_{{ params.table_name }}""",
         params={'table_name':table}
     )

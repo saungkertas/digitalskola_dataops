@@ -31,4 +31,4 @@ for table in ['orders', 'order_details', 'products']:
         params={'table_name':table}
     )
 
-start >> ingest >> to_datalake
+    start >> ingest >> to_datalake

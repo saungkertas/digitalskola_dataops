@@ -35,4 +35,10 @@ with DAG('init_natan',
         bash_command="""bq mk --external_table_definition=/root/table_def/natan/orders.def de_7.natan_orders"""
     )
 
+    
     start >> ingest_orders >> to_datalake_orders >> data_definition_orders >> to_dwh_orders
+    start >> ingest_order_details >> to_datalake_order_details >> data_definition_order_details >> to_dwh_order_details
+    start >> ingest_customers >> to_datalake_customers >> data_definition_customers >> to_dwh_customers
+    start >> ingest_products >> to_datalake_products >> data_definition_products >> to_dwh_products
+    start >> ingest_suppliers >> to_datalake_suppliers >> data_definition_suppliers >> to_dwh_suppliers
+    start >> ingest_categories >> to_datalake_categories >> data_definition_categories >> to_dwh_categories

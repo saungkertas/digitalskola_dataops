@@ -15,14 +15,16 @@ with DAG('daily_jonathan',
         task_id='start'
     )    
     #untuk orders
-    ingest_orders = BashOperator(
-        task_id='ingest_orders',
-        bash_command="""python3 /root/airflow/dags/ingest/jonathan/ingest_orders.py {{ execution_date.format('YYYY-MM-DD') }}"""
-    )
+    table = ["orders" , "order_details" , "products"]
+    for tables in table:
+        ingest = BashOperator(
+            task_id='ingest_' + tables,
+            bash_command="""python3 /root/airflow/dags/ingest/jonathan/ingest_"""+tables+""".py {{ execution_date.format('YYYY-MM-DD') }}"""
+        )
 
-    to_datalake_orders = BashOperator(
-        task_id='to_datalake_orders',
-        bash_command="""gsutil cp /root/output/jonathan/orders/orders_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/jonathan/staging/orders/"""
-    )
+        to_datalake = BashOperator(
+            task_id='to_datalake_' + tables,
+            bash_command="""gsutil cp /root/output/jonathan/"""+tables+"""/"""+tables+"""_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/jonathan/staging/"""+tables+"""/"""
+        )
 
-    start >> ingest_orders >> to_datalake_orders
+    start >> ingest >> to_datalake

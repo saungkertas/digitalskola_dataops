@@ -15,7 +15,7 @@ with DAG('daily_jonathan',
         task_id='start'
     )    
     #untuk orders
-    table = ["orders" , "order_details" , "products"]
+    table = ["orders" , "orders_detail" , "products"]
     for tables in table:
         ingest = BashOperator(
             task_id='ingest_' + tables,

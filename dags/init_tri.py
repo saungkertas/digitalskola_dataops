@@ -21,7 +21,7 @@ with DAG('init_tri',
         bash_command="""python3 /root/airflow/dags/ingest/tri/ingest_orders.py {{ execution_date.format('YYYY-MM-DD') }}"""
     )
 
-    ingest_order_detail = BashOperator(
+    ingest_order_details = BashOperator(
         task_id='ingest_order_details',
         bash_command="""python3 /root/airflow/dags/ingest/tri/ingest_orders_detail.py {{ execution_date.format('YYYY-MM-DD') }}"""
     )

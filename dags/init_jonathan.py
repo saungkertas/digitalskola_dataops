@@ -14,25 +14,26 @@ with DAG('init_jonathan',
     start = DummyOperator(
         task_id='start'
     )    
-      
-    ingest_orders = BashOperator(
-        task_id='ingest_orders',
-        bash_command="""python3 /root/airflow/dags/ingest/jonathan/ingest_orders.py {{ execution_date.format('YYYY-MM-DD') }}"""
-    )
+    table = ["orders" , "order_details" , "products"]
+    for tables in table: 
+        ingest = BashOperator(
+            task_id='ingest_' + tables,
+            bash_command="""python3 /root/airflow/dags/ingest/jonathan/ingest_"""+tables+""".py {{ execution_date.format('YYYY-MM-DD') }}"""
+        )
 
-    to_datalake_orders = BashOperator(
-        task_id='to_datalake_orders',
-        bash_command="""gsutil cp /root/output/jonathan/orders/orders_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/jonathan/staging/orders/"""
-    )
+        to_datalake = BashOperator(
+            task_id='to_datalake_' + tables,
+            bash_command="""gsutil cp /root/output/jonathan/"""+tables+"""/"""+tables+"""_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/jonathan/staging/"""+tables+"""/"""
+        )
 
-    data_definition_orders = BashOperator(
-        task_id='data_definition_orders',
-        bash_command="""bq mkdef --autodetect --source_format=CSV gs://digitalskola-de-batch7/jonathan/staging/orders/* > /root/table_def/jonathan/orders.def"""
-    )
+        data_definition = BashOperator(
+            task_id='data_definition_' + tables,
+            bash_command="""bq mkdef --autodetect --source_format=CSV gs://digitalskola-de-batch7/jonathan/staging/"""+tables+"""/* > /root/table_def/jonathan/"""+tables+""".def"""
+        )
 
-    to_dwh_orders = BashOperator(
-        task_id='to_dwh_orders',
-        bash_command="""bq mk --external_table_definition=/root/table_def/jonathan/orders.def de_7.jonathan_orders"""
-    )
+        to_dwh = BashOperator(
+            task_id='to_dwh_' + tables,
+            bash_command="""bq mk --external_table_definition=/root/table_def/jonathan/"""+tables+""".def de_7.jonathan_"""+tables
+        )
 
-    start >> ingest_orders >> to_datalake_orders >> data_definition_orders >> to_dwh_orders
+    start >> ingest >> to_datalake >> data_definition >> to_dwh

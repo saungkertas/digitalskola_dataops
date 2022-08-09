@@ -25,8 +25,7 @@ with DAG('daily_natan',
         bash_command="""gsutil cp /root/output/natan/orders/orders_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/natan/staging/orders/"""
     )
 
-
-      
+   
     ingest_order_details = BashOperator(
         task_id='ingest_order_details',
         bash_command="""python3 /root/airflow/dags/ingest/natan/ingest_order_details.py {{ execution_date.format('YYYY-MM-DD') }}"""

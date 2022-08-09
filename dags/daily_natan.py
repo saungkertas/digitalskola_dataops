@@ -24,7 +24,16 @@ with DAG('daily_natan',
         task_id='to_datalake_orders',
         bash_command="""gsutil cp /root/output/natan/orders/orders_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/natan/staging/orders/"""
     )
+     
+    ingest_order_details = BashOperator(
+        task_id='ingest_order_details',
+        bash_command="""python3 /root/airflow/dags/ingest/natan/ingest_order_details.py {{ execution_date.format('YYYY-MM-DD') }}"""
+    )
 
+    to_datalake_order_details = BashOperator(
+        task_id='to_datalake_order_details',
+        bash_command="""gsutil cp /root/output/natan/order_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/natan/staging/order_details/"""
+    )
 
     start >> ingest_orders >> to_datalake_orders
     start >> ingest_order_details >> to_datalake_order_details

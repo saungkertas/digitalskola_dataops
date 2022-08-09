@@ -10,7 +10,26 @@ psql_password = Variable.get("psql_password")
 psql_db = Variable.get("psql_db")
 
 conn = None
-sql = """select a.product_id, a.product_name, a.supplier_id, b.company_name , a.category_id, c.category_name, a.quantity_per_unit, a.unit_price, a.units_in_stock, a.units_on_order, a.reorder_level, a.discontinued from products a left join suppliers b on a.supplier_id = b.supplier_id left join categories c on c.category_id = a.category_id = '"""+sys.argv[1]+"""'"""
+sql = """select
+    d.order_id,
+    a.product_id, 
+    a.product_name, 
+    a.supplier_id, 
+    b.company_name , 
+    a.category_id, 
+    c.category_name, 
+    a.quantity_per_unit, 
+    a.unit_price, 
+    a.units_in_stock, 
+    a.units_on_order, 
+    a.reorder_level, 
+    a.discontinued 
+    from products a 
+    left join suppliers b on a.supplier_id = b.supplier_id 
+    left join categories c on c.category_id = a.category_id
+    left join order_details d on d.product_id = a.product_id
+    left join orders e on e.order_id = d.order_id
+    where cast(e.order_date as date)  = '"""+sys.argv[1]+"""'"""
 csv_file_path = '/root/output/jonathan/products/products_'+sys.argv[1]+'.csv'
 
 try:

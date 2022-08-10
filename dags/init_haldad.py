@@ -36,7 +36,7 @@ for task in ['orders', 'order_details', 'products']:
     )
 
     to_dwh = BashOperator(
-        task_id='to_dwh_orders',
+        task_id='to_dwh_'+task,
         bash_command="""bq mk --external_table_definition=/root/table_def/haldad/{{ taskName.name }}.def de_7.haldad_{{ taskName.name }}""",
         taskName={'name':task}
     )

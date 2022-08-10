@@ -16,7 +16,7 @@ with DAG('daily_haldad',
     )    
     
 
-    for task in ['orders','order_details','product']:
+    for task in ['orders','order_details','products']:
 
         ingest = BashOperator(
             task_id=f'ingest_{task}',

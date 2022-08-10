@@ -3,6 +3,7 @@ from airflow.operators.dummy import DummyOperator
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 from airflow.utils.dates import days_ago
+
 from datetime import datetime, timedelta
 
 with DAG('daily_faishal',
@@ -14,7 +15,7 @@ with DAG('daily_faishal',
         task_id='start'
     )    
 
-    #Ingest Data 
+    #Ingest only  
     ingest_orders = BashOperator(
         task_id='ingest_orders',
         bash_command="""python3 /root/airflow/dags/ingest/faishal/ingest_orders.py {{ execution_date.format('YYYY-MM-DD') }}"""
@@ -22,10 +23,10 @@ with DAG('daily_faishal',
 
     ingest_order_details = BashOperator(
         task_id='ingest_order_details',
-        bash_command="""python3 /root/airflow/dags/ingest/faishal/ingest_orders_details.py {{ execution_date.format('YYYY-MM-DD') }}"""
+        bash_command="""python3 /root/airflow/dags/ingest/faishal/ingest_order_details.py {{ execution_date.format('YYYY-MM-DD') }}"""
     )
 
-    #ToDatalake
+    #ToDatalake only
     to_datalake_orders = BashOperator(
         task_id='to_datalake_orders',
         bash_command="""gsutil cp /root/output/faishal/orders/orders_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/faishal/staging/orders/"""
@@ -33,8 +34,7 @@ with DAG('daily_faishal',
 
     to_datalake_order_details = BashOperator(
         task_id='to_datalake_order_details',
-        bash_command="""gsutil cp /root/output/faishal/orders_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/faishal/staging/orders_details/"""
-        
+        bash_command="""gsutil cp /root/output/faishal/order_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/faishal/staging/order_details/"""
     )
 
     start >> ingest_orders >> to_datalake_orders

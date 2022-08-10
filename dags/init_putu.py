@@ -23,7 +23,7 @@ with DAG('init_putu',
 
     ingest_order_details = BashOperator(
         task_id='ingest_order_details',
-        bash_command="""python3 /root/airflow/dags/ingest/putu/ingest_orders_detail.py {{ execution_date.format('YYYY-MM-DD') }}"""
+        bash_command="""python3 /root/airflow/dags/ingest/putu/ingest_order_details.py {{ execution_date.format('YYYY-MM-DD') }}"""
     )
 
     ingest_products = BashOperator(
@@ -56,7 +56,7 @@ with DAG('init_putu',
 
     to_datalake_order_details = BashOperator(
         task_id='to_datalake_order_details',
-        bash_command="""gsutil cp /root/output/putu/order_details/orders_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/putu/staging/order_details/"""
+        bash_command="""gsutil cp /root/output/putu/order_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/putu/staging/order_details/"""
     )
 
     to_datalake_products = BashOperator(

@@ -15,30 +15,30 @@ with DAG('init_haldad',
         task_id='start'
     )
 
-    for task in ['orders', 'order_details', 'products']:    
-        
-        ingest = BashOperator(
-            task_id='ingest_' + task,
-            taskName={'name':task},
-            bash_command="""python3 /root/airflow/dags/ingest/haldad/ingest_{{ taskName.name }}.py {{ execution_date.format('YYYY-MM-DD') }}""",
-        )
+for task in ['orders', 'order_details', 'products']:    
+    
+    ingest = BashOperator(
+        task_id='ingest_' + task,
+        bash_command="""python3 /root/airflow/dags/ingest/haldad/ingest_{{ taskName.name }}.py {{ execution_date.format('YYYY-MM-DD') }}""",
+        taskName={'name':task}
+    )
 
-        to_datalake = BashOperator(
-            task_id='to_datalake_' + task,
-            taskName={'name':task},
-            bash_command="""gsutil cp /root/output/haldad/{{ taskName.name }}/{{ taskName.name }}_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/haldad/staging/{{ taskName.name }}/""",
-        )
+    to_datalake = BashOperator(
+        task_id='to_datalake_' + task,
+        bash_command="""gsutil cp /root/output/haldad/{{ taskName.name }}/{{ taskName.name }}_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/haldad/staging/{{ taskName.name }}/""",
+        taskName={'name':task}
+    )
 
-        data_definition = BashOperator(
-            task_id='data_definition_' + task,
-            taskName={'name':task},
-            bash_command="""bq mkdef --autodetect --source_format=CSV gs://digitalskola-de-batch7/haldad/staging/{{ taskName.name }}/* > /root/table_def/haldad/{{ taskName.name }}.def""",
-        )
+    data_definition = BashOperator(
+        task_id='data_definition_' + task,
+        bash_command="""bq mkdef --autodetect --source_format=CSV gs://digitalskola-de-batch7/haldad/staging/{{ taskName.name }}/* > /root/table_def/haldad/{{ taskName.name }}.def""",
+        taskName={'name':task}
+    )
 
-        to_dwh = BashOperator(
-            task_id='to_dwh_orders',
-            taskName={'name':task},
-            bash_command="""bq mk --external_table_definition=/root/table_def/haldad/{{ taskName.name }}.def de_7.haldad_{{ taskName.name }}""",
-        )
+    to_dwh = BashOperator(
+        task_id='to_dwh_orders',
+        bash_command="""bq mk --external_table_definition=/root/table_def/haldad/{{ taskName.name }}.def de_7.haldad_{{ taskName.name }}""",
+        taskName={'name':task}
+    )
 
-        start >> ingest >> to_datalake >> data_definition >> to_dwh
+    start >> ingest >> to_datalake >> data_definition >> to_dwh

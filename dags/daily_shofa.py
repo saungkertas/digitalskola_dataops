@@ -36,7 +36,7 @@ with DAG('daily_shofa',
 
     to_datalake_order_details = BashOperator(
         task_id='to_datalake_order_details',
-        bash_command="""gsutil cp /root/output/shofa/orders/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/shofa/staging/order_details/"""
+        bash_command="""gsutil cp /root/output/shofa/order_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/shofa/staging/order_details/"""
     )
 
     # products

@@ -14,26 +14,19 @@ with DAG('daily_haldad',
     start = DummyOperator(
         task_id='start'
     )    
-      
-    ingest_orders = BashOperator(
-        task_id='ingest_orders',
-        bash_command="""python3 /root/airflow/dags/ingest/haldad/ingest_orders.py {{ execution_date.format('YYYY-MM-DD') }}"""
-    )
+    
 
-    to_datalake_orders = BashOperator(
-        task_id='to_datalake_orders',
-        bash_command="""gsutil cp /root/output/haldad/orders/orders_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/haldad/staging/orders/"""
-    )
+    for task in ['orders','order_details','product']:
 
-    ingest_order_details= BashOperator(
-        task_id = 'ingest_order_details',
-        bash_command = """python3 /root/airflow/dags/ingest/haldad/ingest_order_details.py {{ execution_date.format('YYYY-MM-DD') }}"""
-    )
+        ingest = BashOperator(
+            task_id=f'ingest_{task}',
+            taskName = {'name':task},
+            bash_command="""python3 /root/airflow/dags/ingest/haldad/ingest_{{taksName.name}}.py {{ execution_date.format('YYYY-MM-DD') }}"""
+        )
 
-    to_datalake_order_details= BashOperator(
-        task_id = 'to_datalake_order_details',
-        bash_command = """gsutil cp /root/output/haldad/order_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/haldad/staging/order_details/"""
-    )
-
-    start >> ingest_orders >> to_datalake_orders
-    start >> ingest_order_details >> to_datalake_order_details
+        to_datalake = BashOperator(
+            task_id='to_datalake_orders',
+            task = {'name':task},
+            bash_command="""gsutil cp /root/output/haldad/{{taskName.name}}/{{taskName.name}}_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/haldad/staging/{{taskName.name}}/"""
+        )
+        start >> ingest >> to_datalake

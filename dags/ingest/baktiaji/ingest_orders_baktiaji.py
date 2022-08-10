@@ -1,26 +1,36 @@
-import pymysql
+import psycopg2
 import csv
 import sys
+from airflow.models import Variable
 
-print('satu '+sys.argv[1])
-print('nol '+sys.argv[0])
-conn = pymysql.connect(host='host.docker.internal',
-                           port=3307,
-                           user='admin', 
-                           password='admin',  
-                           db='northwind')
-    #run mysql query
-cur = conn.cursor()
+psql_host = Variable.get("psql_host")
+psql_port = int(Variable.get("psql_port"))
+psql_user = Variable.get("psql_user")
+psql_password = Variable.get("psql_password")
+psql_db = Variable.get("psql_db")
 
-
-sql = """select * from northwind.orders o where cast(order_date as date) = '"""+sys.argv[1]+"""'"""
-csv_file_path = '/opt/airflow/dags/output/baktiaji/orders/orders_'+sys.argv[1]+'.csv'
+conn = None
+sql = """select order_id,customer_id,employee_id,order_date,required_date,shipped_date,ship_country from orders o where cast(order_date as date) = '"""+sys.argv[1]+"""'"""
+csv_filepath = '/root/output/baktiaji/orders/orders'+sys.argv[1]+'.csv'
 
 try:
-    cur.execute(sql)
-    rows = cur.fetchall()
+    #connection to PostgreSQL
+    conn = psycopg2.connect(
+        user=psql_user,
+        password=psql_password,
+        dbname=psql_db,
+        host=psql_host,
+        port=psql_port
+    )
+
+    #run PostgreSQL query
+    conn.autocommit = True
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
 finally:
-    conn.close()
+    if conn:
+        conn.close()
 
 # Continue only if there are rows returned.
 if rows:
@@ -29,7 +39,7 @@ if rows:
 
     # The row name is the first entry for each entity in the description tuple.
     column_names = list()
-    for i in cur.description:
+    for i in cursor.description:
         column_names.append(i[0])
 
     result.append(column_names)

@@ -56,7 +56,7 @@ with DAG('init_efrad',
 
     to_datalake_orders_details = BashOperator(
         task_id='to_datalake_order_details',
-        bash_command="""gsutil cp /root/output/efrad/orders_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/efrad/staging/order_details/"""
+        bash_command="""gsutil cp /root/output/efrad/orders_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/efrad/staging/orders_details/"""
     )
 
     to_datalake_products = BashOperator(

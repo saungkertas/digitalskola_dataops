@@ -76,7 +76,7 @@ with DAG('init_putu',
 
     to_datalake_customers = BashOperator(
         task_id='to_datalake_customers',
-        bash_command="""gsutil cp /root/output/putu/categories/customers_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/putu/staging/customers/"""
+        bash_command="""gsutil cp /root/output/putu/customers/customers_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/putu/staging/customers/"""
     )
 
 

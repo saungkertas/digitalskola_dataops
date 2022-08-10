@@ -47,7 +47,7 @@ if rows:
         result.append(row)
 
     # Write result to file.
-    with open(csv_file_path, 'w', newline='') as csvfile:
+    with open(csv_filepath, 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for row in result:
             csvwriter.writerow(row)

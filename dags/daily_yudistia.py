@@ -7,7 +7,7 @@ from airflow.utils.dates import days_ago
 from datetime import datetime, timedelta
 
 with DAG('daily_yudistia',
-    schedule_interval='@daily',
+    schedule_interval='0 0 * * *',
     start_date=datetime(2022, 7, 1)       
 ) as dag:
 

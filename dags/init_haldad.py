@@ -25,7 +25,7 @@ for task in ['orders', 'order_details', 'products']:
 
     to_datalake = BashOperator(
         task_id='to_datalake_' + task,
-        task={'name':task},
+        taskName={'name':task},
         bash_command="""gsutil cp /root/output/haldad/{{ taskName.name }}/{{ taskName.name }}_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/haldad/staging/{{ taskName.name }}/""",
     )
 

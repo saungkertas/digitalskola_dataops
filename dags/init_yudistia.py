@@ -8,13 +8,13 @@ from datetime import datetime, timedelta
 
 with DAG('init_yudistia',
     schedule_interval="@once",
-    start_date=datetime(2022, 7, 6)       
+    start_date=datetime(2022, 7, 6)
 ) as dag:
 
     start = DummyOperator(
         task_id='start'
-    )    
-      
+    )
+
     # Ingest Data
     ingest_orders = BashOperator(
         task_id='ingest_orders',
@@ -42,6 +42,7 @@ with DAG('init_yudistia',
     )
 
 
+
     # To Data Lake
     to_datalake_orders = BashOperator(
         task_id='to_datalake_orders',
@@ -65,8 +66,10 @@ with DAG('init_yudistia',
 
     to_datalake_customers = BashOperator(
         task_id='to_datalake_customers',
-        bash_command="""gsutil cp /root/output/yudistia/customer/customers_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/yudistia/staging/customers/"""
+        bash_command="""gsutil cp /root/output/yudistia/customers/customers_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/yudistia/staging/customers/"""
     )
+
+
 
     #Data Definition
     data_definition_orders = BashOperator(
@@ -93,6 +96,8 @@ with DAG('init_yudistia',
         task_id='data_definition_customers',
         bash_command="""bq mkdef --autodetect --source_format=CSV gs://digitalskola-de-batch7/yudistia/staging/customers/* > /root/table_def/yudistia/customers.def"""
     )
+
+
 
     #To Dwh
     to_dwh_orders = BashOperator(

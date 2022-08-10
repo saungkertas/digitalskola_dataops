@@ -51,32 +51,32 @@ with DAG('init_efrad',
     # To Data Lake
     to_datalake_orders = BashOperator(
         task_id='to_datalake_orders',
-        bash_command="""gsutil cp /root/output/efrad/orders/orders_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/tri/staging/orders/"""
+        bash_command="""gsutil cp /root/output/efrad/orders/orders_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/efrad/staging/orders/"""
     )
 
     to_datalake_orders_details = BashOperator(
         task_id='to_datalake_order_details',
-        bash_command="""gsutil cp /root/output/efrad/orders_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/tri/staging/order_details/"""
+        bash_command="""gsutil cp /root/output/efrad/orders_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/efrad/staging/order_details/"""
     )
 
     to_datalake_products = BashOperator(
         task_id='to_datalake_products',
-        bash_command="""gsutil cp /root/output/efrad/products/products_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/tri/staging/products/"""
+        bash_command="""gsutil cp /root/output/efrad/products/products_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/efrad/staging/products/"""
     )
 
     to_datalake_suppliers = BashOperator(
         task_id='to_datalake_suppliers',
-        bash_command="""gsutil cp /root/output/efrad/suppliers/suppliers_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/tri/staging/suppliers/"""
+        bash_command="""gsutil cp /root/output/efrad/suppliers/suppliers_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/efrad/staging/suppliers/"""
     )
 
     to_datalake_categories = BashOperator(
         task_id='to_datalake_categories',
-        bash_command="""gsutil cp /root/output/efrad/categories/categories_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/tri/staging/categories/"""
+        bash_command="""gsutil cp /root/output/efrad/categories/categories_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/efrad/staging/categories/"""
     )
 
     to_datalake_customers = BashOperator(
         task_id='to_datalake_customers',
-        bash_command="""gsutil cp /root/output/efrad/customers/customers_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/tri/staging/customers/"""
+        bash_command="""gsutil cp /root/output/efrad/customers/customers_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/efrad/staging/customers/"""
     )
 
 

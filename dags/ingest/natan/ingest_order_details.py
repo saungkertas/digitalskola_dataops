@@ -10,8 +10,8 @@ psql_password = Variable.get("psql_password")
 psql_db = Variable.get("psql_db")
 
 conn = None
-sql = """select * from order_details where order_id in(select order_id from orders where order_date = #args#) = '"""order_id"""'"""
-csv_file_path = '/root/output/natan/orders/orders_'+sys.argv[1]+'.csv'
+sql = """select * from order_details where order_id in (select order_id from orders where cast(order_date as date) = '"""+sys.argv[1]+"""')"""
+csv_file_path = '/root/output/natan/order_details/order_details_'+sys.argv[1]+'.csv'
 
 try:
     #connection to PostgreSQL

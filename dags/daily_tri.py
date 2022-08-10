@@ -25,7 +25,7 @@ with DAG(
 
     ingest_order_details = BashOperator(
         task_id='ingest_order_details',
-        bash_command="""python3 /root/airflow/dags/ingest/tri/ingest_orders_detail.py {{ execution_date.format('YYYY-MM-DD') }}"""
+        bash_command="""python3 /root/airflow/dags/ingest/tri/ingest_order_details.py {{ execution_date.format('YYYY-MM-DD') }}"""
     )
 
 
@@ -37,7 +37,7 @@ with DAG(
 
     to_datalake_order_details = BashOperator(
         task_id='to_datalake_order_details',
-        bash_command="""gsutil cp /root/output/tri/order_details/orders_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/tri/staging/order_details/"""
+        bash_command="""gsutil cp /root/output/tri/order_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/tri/staging/order_details/"""
     )
 
    

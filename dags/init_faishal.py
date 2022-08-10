@@ -76,7 +76,7 @@ with DAG('init_faishal',
 
     to_datalake_customers = BashOperator(
         task_id='to_datalake_customers',
-        bash_command="""gsutil cp /root/output/faishal/categories/customers_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/faishal/staging/customers/"""
+        bash_command="""gsutil cp /root/output/faishal/customers/customers_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/faishal/staging/customers/"""
     )
 
 

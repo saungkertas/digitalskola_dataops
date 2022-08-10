@@ -11,7 +11,7 @@ psql_db = Variable.get("psql_db")
 
 conn = None
 sql = """select order_id,customer_id,employee_id,order_date,required_date,shipped_date,ship_country from orders o where cast(order_date as date) = '"""+sys.argv[1]+"""'"""
-csv_filepath = '/root/output/baktiaji/orders/orders'+sys.argv[1]+'.csv'
+csv_file_path = '/root/output/baktiaji/orders/orders_'+sys.argv[1]+'.csv'
 
 try:
     #connection to PostgreSQL
@@ -47,7 +47,7 @@ if rows:
         result.append(row)
 
     # Write result to file.
-    with open(csv_filepath, 'w', newline='') as csvfile:
+    with open(csv_file_path, 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for row in result:
             csvwriter.writerow(row)

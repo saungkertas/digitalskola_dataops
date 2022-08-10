@@ -56,7 +56,7 @@ with DAG('init_ricko',
 
     to_datalake_order_details = BashOperator(
         task_id='to_datalake_order_details',
-        bash_command="""gsutil cp /root/output/ricko/order_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/ricko/staging/order_details/"""
+        bash_command="""gsutil cp /root/output/ricko/orders_detail/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/ricko/staging/order_details/"""
     )
 
     to_datalake_products = BashOperator(

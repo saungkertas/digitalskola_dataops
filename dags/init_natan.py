@@ -52,7 +52,7 @@ with DAG('init_natan',
 
     to_dwh_order_details = BashOperator(
         task_id='to_dwh_order_details',
-        bash_command="""bq mk --external_table_definition=/root/table_def/natan/order_details.def de_7.natan_order_order_details"""
+        bash_command="""bq mk --external_table_definition=/root/table_def/natan/order_details.def de_7.natan_order_details"""
     )
 
     ingest_customers = BashOperator(

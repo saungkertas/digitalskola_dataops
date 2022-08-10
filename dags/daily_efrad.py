@@ -16,7 +16,7 @@ with DAG(
         task_id = 'start'
     )
 
-    # Ingest Data   
+    # Ingest Data
     ingest_orders = BashOperator(
         task_id='ingest_orders',
         bash_command="""python3 /root/airflow/dags/ingest/efrad/ingest_orders.py {{ execution_date.format('YYYY-MM-DD') }}"""
@@ -36,8 +36,9 @@ with DAG(
 
     to_datalake_orders_details = BashOperator(
         task_id='to_datalake_order_details',
-        bash_command="""gsutil cp /root/output/efrad/order_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/efrad/staging/orders_details/"""
+        bash_command="""gsutil cp /root/output/efrad/orders_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/efrad/staging/order_details/"""
     )
 
     start >> ingest_orders >> to_datalake_orders
     start >> ingest_orders_details >> to_datalake_orders_details
+

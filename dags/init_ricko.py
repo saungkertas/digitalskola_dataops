@@ -56,7 +56,7 @@ with DAG('init_ricko',
 
     to_datalake_order_details = BashOperator(
         task_id='to_datalake_order_details',
-        bash_command="""gsutil cp /root/output/ricko/orders_detail/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/ricko/staging/order_details/"""
+        bash_command="""gsutil cp /root/output/ricko/orders_detail/orders_detail_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/ricko/staging/orders_detail/"""
     )
 
     to_datalake_products = BashOperator(
@@ -89,7 +89,7 @@ with DAG('init_ricko',
 
     data_definition_order_details = BashOperator(
         task_id='data_definition_order_details',
-        bash_command="""bq mkdef --autodetect --source_format=CSV gs://digitalskola-de-batch7/ricko/staging/order_details/* > /root/table_def/ricko/order_details.def"""
+        bash_command="""bq mkdef --autodetect --source_format=CSV gs://digitalskola-de-batch7/ricko/staging/orders_detail/* > /root/table_def/ricko/orders_detail.def"""
     )
 
     data_definition_products = BashOperator(
@@ -122,7 +122,7 @@ with DAG('init_ricko',
 
     to_dwh_order_details = BashOperator(
         task_id='to_dwh_order_details',
-        bash_command="""bq mk --external_table_definition=/root/table_def/ricko/order_details.def de_7.ricko_order_details"""
+        bash_command="""bq mk --external_table_definition=/root/table_def/ricko/orders_detail.def de_7.ricko_orders_detail"""
     )
 
     to_dwh_products = BashOperator(

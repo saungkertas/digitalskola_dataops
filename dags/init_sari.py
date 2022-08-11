@@ -20,13 +20,13 @@ with DAG('daily_sari',
 for tb1 in tabel_list1:
     ingest1= BashOperator(
         task_id='ingest_'+tb1,
-        bash_command="""python3 /root/airflow/dags/ingest/sari/ingest_{{params.tb1}}.py {{ execution_date.format('YYYY-MM-DD') }}""",
+        bash_command="""python3 /root/airflow/dags/ingest/sari/ingest_{{params.tb1}}.py""",
         params = {'tb1': tb1}
     )
 
     to_datalake1 = BashOperator(
         task_id='to_datalake_'+tb1,
-        bash_command="""gsutil cp /root/output/sari/{{params.tb1}}/{{params.tb1}}.py_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/sari/staging/{{params.tb1}}/""",
+        bash_command="""gsutil cp /root/output/sari/{{params.tb1}}/{{params.tb1}}.csv gs://digitalskola-de-batch7/sari/staging/{{params.tb1}}/""",
         params = {'tb1': tb1}
     )
 
@@ -51,7 +51,7 @@ for tb2 in tabel_list2:
 
     to_datalake2 = BashOperator(
         task_id='to_datalake_'+tb2,
-        bash_command="""gsutil cp /root/output/sari/{{params.tb2}}/{{params.tb2}}.py_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/sari/staging/{{params.tb2}}/""",
+        bash_command="""gsutil cp /root/output/sari/{{params.tb2}}/{{params.tb2}}_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/sari/staging/{{params.tb2}}/""",
         params = {'tb2': tb2}
     )
 

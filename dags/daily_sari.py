@@ -36,7 +36,7 @@ for tb in tabel_list:
     )
 
     to_dwh = BashOperator(
-        task_id='dwh_orders',
+        task_id='dwh_'+tb,
         bash_command="""bq mk --external_table_definition=/root/table_def/sari/{{params.tb}}.def de_7.sari_{{params.tb}}"""
     )
     start >> ingest >> to_datalake >> data_definition >> to_dwh

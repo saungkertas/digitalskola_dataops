@@ -21,7 +21,7 @@ with DAG('init_salma',
         bash_command="""python3 /root/airflow/dags/ingest/salma/ingest_orders.py {{ execution_date.format('YYYY-MM-DD') }}"""
     )
 
-    ingest_orders = BashOperator(
+    ingest_order_details = BashOperator(
         task_id='ingest_order_details',
         bash_command="""python3 /root/airflow/dags/ingest/salma/ingest_order_details.py {{ execution_date.format('YYYY-MM-DD') }}"""
     )

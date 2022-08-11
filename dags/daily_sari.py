@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 tabel_list = ['orders','order_details']
 
 with DAG('daily_sari',
-    schedule_interval='0 0 * * *',
+    schedule_interval='@daily',
     start_date=datetime(2022, 8, 1)       
 ) as dag:
 

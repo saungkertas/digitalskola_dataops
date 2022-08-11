@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 
 with DAG(
     'daily_ricko',
-    schedule_interval='0 0 * * *',
+    schedule_interval='@daily',
     start_date=datetime(2022, 7, 1)
 ) as dag:
 
@@ -17,18 +17,28 @@ with DAG(
         task_id = 'start'
     )
 
-for table in ['orders', 'order_details', 'products']:
-
-    ingest = BashOperator(
-        task_id="ingest_" + table,
-        bash_command="""python3 /root/airflow/dags/ingest/ricko/ingest_{{ params.table_name }}.py {{ execution_date.format('YYYY-MM-DD') }}""",
-        params={'table_name':table}
+    # Ingest Data   
+    ingest_orders = BashOperator(
+        task_id='ingest_orders',
+        bash_command="""python3 /root/airflow/dags/ingest/ricko/ingest_orders.py {{ execution_date.format('YYYY-MM-DD') }}"""
     )
 
-    to_datalake = BashOperator(
-        task_id="to_datalake" + table,
-        bash_command="""gsutil cp /root/output/ricko/{{ params.table_name }}/{{ params.table_name }}_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/ricko/staging/{{ params.table_name }}/""",
-        params={'table_name':table}
+    ingest_order_details = BashOperator(
+        task_id='ingest_order_details',
+        bash_command="""python3 /root/airflow/dags/ingest/ricko/ingest_order_details.py {{ execution_date.format('YYYY-MM-DD') }}"""
     )
 
-    start >> ingest >> to_datalake
+
+    # To Data Lake
+    to_datalake_orders = BashOperator(
+        task_id='to_datalake_orders',
+        bash_command="""gsutil cp /root/output/ricko/orders/orders_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/ricko/staging/orders/"""
+    )
+
+    to_datalake_order_details = BashOperator(
+        task_id='to_datalake_order_details',
+        bash_command="""gsutil cp /root/output/ricko/orders_detail/orders_detail_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/ricko/staging/orders_detail/"""
+    )
+
+    start >> ingest_orders >> to_datalake_orders
+    start >> ingest_order_details >> to_datalake_order_details

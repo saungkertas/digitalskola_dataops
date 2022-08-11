@@ -37,8 +37,7 @@ if rows:
     # New empty list called 'result'. This will be written to a file.
     result = list()
 
-    # The row name is the first entry for each entity in the description t
-uple.
+    # The row name is the first entry for each entity in the description tuple.
     column_names = list()
     for i in cursor.description:
         column_names.append(i[0])
@@ -49,8 +48,7 @@ uple.
 
     # Write result to file.
     with open(csv_file_path, 'w', newline='') as csvfile:
-        csvwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quot
-ing=csv.QUOTE_MINIMAL)
+        csvwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for row in result:
             csvwriter.writerow(row)
 else:

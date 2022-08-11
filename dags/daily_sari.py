@@ -30,7 +30,7 @@ for tb in tabel_list:
         params = {'tb': tb}
     )
 
-     data_definition = BashOperator(
+    data_definition = BashOperator(
         task_id='data_definition_'+tb,
         bash_command="""bq mkdef --autodetect --source_format=CSV gs://digitalskola-de-batch7/sari/staging/{{params.tb}}/* > /root/table_def/sari/{{params.tb}}}.def"""
     )

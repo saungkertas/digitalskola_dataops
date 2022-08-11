@@ -20,17 +20,17 @@ with DAG('daily_sari',
 for tb1 in tabel_list1:
     ingest1= BashOperator(
         task_id='ingest_'+tb1,
-        bash_command="""python3 /root/airflow/dags/ingest/sari/ingest_{{params.tb1}}.py {{ execution_date.format('YYYY-MM-DD') }}""",
+        bash_command="""python3 /root/airflow/dags/ingest/sari/ingest_{{params.tb1}}.py""",
         params = {'tb1': tb1}
     )
 
     to_datalake1 = BashOperator(
         task_id='to_datalake_'+tb1,
-        bash_command="""gsutil cp /root/output/sari/{{params.tb1}}/{{params.tb1}}.py_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/sari/staging/{{params.tb1}}/""",
+        bash_command="""gsutil cp /root/output/sari/{{params.tb1}}/{{params.tb1}}.csv gs://digitalskola-de-batch7/sari/staging/{{params.tb1}}/""",
         params = {'tb1': tb1}
     )
 
-     data_definition1 = BashOperator(
+    data_definition1 = BashOperator(
         task_id='data_definition_'+tb1,
         bash_command="""bq mkdef --autodetect --source_format=CSV gs://digitalskola-de-batch7/sari/staging/{{params.tb1}}/* > /root/table_def/sari/{{params.tb1}}}.def"""
     )
@@ -51,11 +51,11 @@ for tb2 in tabel_list2:
 
     to_datalake2 = BashOperator(
         task_id='to_datalake_'+tb2,
-        bash_command="""gsutil cp /root/output/sari/{{params.tb2}}/{{params.tb2}}.py_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/sari/staging/{{params.tb2}}/""",
+        bash_command="""gsutil cp /root/output/sari/{{params.tb2}}/{{params.tb2}}_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/sari/staging/{{params.tb2}}/""",
         params = {'tb2': tb2}
     )
 
-     data_definition2 = BashOperator(
+    data_definition2 = BashOperator(
         task_id='data_definition_'+tb2,
         bash_command="""bq mkdef --autodetect --source_format=CSV gs://digitalskola-de-batch7/sari/staging/{{params.tb2}}/* > /root/table_def/sari/{{params.tb2}}}.def"""
     )

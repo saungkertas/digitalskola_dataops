@@ -9,7 +9,7 @@ tabel_list1 = ['customers','categories','suppliers', 'products']
 tabel_list2 = ['orders','order_details']
 
 with DAG('init_sari',
-    schedule_interval='0 0 * * *',
+    schedule_interval='@once',
     start_date=datetime(2022, 8, 1)       
 ) as dag:
 

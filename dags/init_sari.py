@@ -30,7 +30,7 @@ for tb1 in tabel_list1:
         params = {'tb1': tb1}
     )
 
-     data_definition1 = BashOperator(
+    data_definition1 = BashOperator(
         task_id='data_definition_'+tb1,
         bash_command="""bq mkdef --autodetect --source_format=CSV gs://digitalskola-de-batch7/sari/staging/{{params.tb1}}/* > /root/table_def/sari/{{params.tb1}}}.def"""
     )
@@ -55,7 +55,7 @@ for tb2 in tabel_list2:
         params = {'tb2': tb2}
     )
 
-     data_definition2 = BashOperator(
+    data_definition2 = BashOperator(
         task_id='data_definition_'+tb2,
         bash_command="""bq mkdef --autodetect --source_format=CSV gs://digitalskola-de-batch7/sari/staging/{{params.tb2}}/* > /root/table_def/sari/{{params.tb2}}}.def"""
     )

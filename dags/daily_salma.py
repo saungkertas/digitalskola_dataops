@@ -32,7 +32,7 @@ with DAG('daily_salma',
 
     to_datalake_order_details = BashOperator(
         task_id='to_datalake_order_details',
-        bash_command="""gsutil cp /root/output/salma/order_details/order_details{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/salma/staging/order_details/"""
+        bash_command="""gsutil cp /root/output/salma/order_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/salma/staging/order_details/"""
     )
     start >> ingest_orders >> to_datalake_orders
     start >> ingest_order_details >> to_datalake_order_details

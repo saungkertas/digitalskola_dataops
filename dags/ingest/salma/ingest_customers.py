@@ -11,7 +11,7 @@ psql_db = Variable.get("psql_db")
 
 conn = None
 sql = """select customer_id, company_name, contact_name, contact_title, address, city,region, postal_code, country, phone, fax from customers"""
-csv_file_path = '/root/output/salma/customers/customers_'+sys.argv[1]+'.csv'
+csv_file_path = '/root/output/salma/customers/customers.csv'
 
 try:
     #connection to PostgreSQL

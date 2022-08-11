@@ -10,8 +10,8 @@ psql_password = Variable.get("psql_password")
 psql_db = Variable.get("psql_db")
 
 conn = None
-sql = """select product_id, product_name, supplier_id, category_id, quantity_per_unit, unit_price, units_in_stock, units_in_order, reorder_level, discontinued from products"""
-csv_file_path = '/root/output/salma/products/products_'+sys.argv[1]+'.csv'
+sql = """select product_id, product_name, supplier_id, category_id, quantity_per_unit, unit_price, units_in_stock, units_on_order, reorder_level, discontinued from products"""
+csv_file_path = '/root/output/salma/products/products.csv'
 
 try:
     #connection to PostgreSQL

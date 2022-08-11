@@ -11,7 +11,7 @@ psql_db = Variable.get("psql_db")
 
 conn = None
 sql = """select order_id,customer_id,employee_id,order_date,required_date,shipped_date,ship_country from orders o where cast(order_date as date) = '"""+sys.argv[1]+"""'"""
-csv_file_path = '/root/output/syarif/orders/orders_'+sys.argv[1]+'.csv'
+csv_file_path = '/root/output/isbakhul/orders/orders_'+sys.argv[1]+'.csv'
 
 try:
     #connection to PostgreSQL

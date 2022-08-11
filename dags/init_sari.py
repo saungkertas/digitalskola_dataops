@@ -36,7 +36,7 @@ for tb1 in tabel_list1:
     )
 
     to_dwh1 = BashOperator(
-        task_id='dwh_orders',
+        task_id='dwh_orders_'+tb1,
         bash_command="""bq mk --external_table_definition=/root/table_def/sari/{{params.tb1}}.def de_7.sari_{{params.tb1}}"""
     )
     
@@ -61,7 +61,7 @@ for tb2 in tabel_list2:
     )
 
     to_dwh2 = BashOperator(
-        task_id='dwh_orders',
+        task_id='dwh_orders_'+tb1,
         bash_command="""bq mk --external_table_definition=/root/table_def/sari/{{params.tb2}}.def de_7.sari_{{params.tb2}}"""
     )
 

@@ -39,7 +39,7 @@ with DAG('init_almi',
 
     to_datalake_order_details = BashOperator(
         task_id='to_datalake_order_details',
-        bash_command="""gsutil cp /root/output/almi/order_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/almi/staging/order_detail/"""
+        bash_command="""gsutil cp /root/output/almi/order_details/order_details_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/almi/staging/order_details/"""
     )
 
     to_datalake_products = BashOperator(

@@ -9,7 +9,7 @@ tabel_list = ['orders','order_details']
 
 with DAG('daily_sari',
     schedule_interval='@daily',
-    start_date=datetime(2022, 8, 1)       
+    start_date=datetime(2022, 7, 1)       
 ) as dag:
 
     start = DummyOperator(

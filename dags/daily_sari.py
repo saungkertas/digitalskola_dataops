@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 tabel_list = ['orders','order_details']
 
 with DAG('daily_sari',
-    schedule_interval='0 0 * * *',
+    schedule_interval='@daily',
     start_date=datetime(2022, 8, 1)       
 ) as dag:
 
@@ -26,7 +26,7 @@ for tb in tabel_list:
 
     to_datalake = BashOperator(
         task_id='to_datalake_'+tb,
-        bash_command="""gsutil cp /root/output/sari/{{params.tb}}/{{params.tb}}.py_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/sari/staging/{{params.tb}}/""",
+        bash_command="""gsutil cp /root/output/sari/{{params.tb}}/{{params.tb}}_{{ execution_date.format('YYYY-MM-DD') }}.csv gs://digitalskola-de-batch7/sari/staging/{{params.tb}}/""",
         params = {'tb': tb}
     )
 

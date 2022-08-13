@@ -138,7 +138,7 @@ with DAG('init_yudistia',
 
     to_dwh_order_details = BashOperator(
         task_id='to_dwh_order_details',
-        bash_command="""bq mk --external_table_definition=/root/table_def/yudistia/order_details.def de_7.yudistia_order_detials"""
+        bash_command="""bq mk --external_table_definition=/root/table_def/yudistia/order_details.def de_7.yudistia_order_details"""
     )
 
     start >> ingest_orders >> to_datalake_orders >> data_definition_orders >> to_dwh_orders
